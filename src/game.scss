@@ -13,18 +13,13 @@ body {
     aspect-ratio: 1;
     align-items: center;
     justify-content: center;
-    //border: 1px solid #aaa;
     background: white;
-    //filter: drop-shadow(3px 3px 10px var(--color-bg-0));
     box-shadow: 3px 3px 10px var(--color-bg-0);
     border-radius: 4px;
     cursor: pointer;
-    //font-weight: bold;
     font-size: 32px;
     z-index: 2;
     font-family: monospace;
-
-
     transition: transform 0.3s, opacity 1s, background-color 0.2s;
 
     &:hover {

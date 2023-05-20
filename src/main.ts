@@ -1,6 +1,5 @@
 import "./global.scss";
 import "./game.scss";
-// import { setupCounter } from "./counter";
 import Game from "./game";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
@@ -8,5 +7,3 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 `;
 
 new Game(document.querySelector<HTMLButtonElement>(".game")!);
-
-// setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
