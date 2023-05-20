@@ -1,0 +1,67 @@
+body {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  gap: 10px;
+  //https://www.youtube.com/shorts/DA1WfL_1aXA
+
+  .cell {
+    display: flex;
+    aspect-ratio: 1;
+    align-items: center;
+    justify-content: center;
+    //border: 1px solid #aaa;
+    background: white;
+    //filter: drop-shadow(3px 3px 10px var(--color-bg-0));
+    box-shadow: 3px 3px 10px var(--color-bg-0);
+    border-radius: 4px;
+    cursor: pointer;
+    //font-weight: bold;
+    font-size: 32px;
+    z-index: 2;
+    font-family: monospace;
+
+
+    transition: transform 0.3s, opacity 1s, background-color 0.2s;
+
+    &:hover {
+      background: #f9f9f9;
+      transform: scale(1.05);
+    }
+
+    &.solved {
+      opacity: 0.3;
+    }
+
+    &.pulse {
+      animation: pulse 1s 1;
+    }
+
+    &.selected {
+      border: 2px solid dodgerblue;
+    }
+
+    &.initial-frame {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    40% {
+      transform: scale(1.1);
+    }
+    60% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
