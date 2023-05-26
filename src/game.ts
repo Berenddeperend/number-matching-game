@@ -26,7 +26,21 @@ export default class Game {
 
     this.attachEventListeners();
 
-    this.getNeighborCells(this.cells[0]);
+    this.autoplay();
+  }
+
+  private autoplay() {
+    setInterval(() => {
+      const pairs = this.nextUnsolvedPair();
+      if (pairs.length) {
+        pairs.forEach((pair) => {
+          pair.pulse();
+          setTimeout(() => pair.solve(), 500);
+        });
+      } else {
+        this.addCells();
+      }
+    }, 1000);
   }
 
   private attachEventListeners() {
@@ -63,6 +77,9 @@ export default class Game {
   }
 
   private nextUnsolvedPair() {
+    // gaat nog niet helemaal goe
+    // todo: de array overflow pair werkt ook nog niet
+
     return this.cells
       .filter((cell) => !cell.solved)
       .reduce((acc: Cell[], curr) => {
@@ -102,7 +119,7 @@ export default class Game {
       constraints.push("left");
     }
     if (cellIndex % this.gridWidth === this.gridWidth - 1) {
-      constraints.push("right");
+      constraints.push("bottomRight");
     }
     if (cellIndex >= this.cells.length - this.gridWidth) {
       constraints.push("bottom");
@@ -113,7 +130,13 @@ export default class Game {
     if (cellIndex === this.cells.length - 1) {
       constraints.push("last");
     }
-    return constraints as ("left" | "right" | "bottom" | "last")[];
+    return constraints as (
+      | "left"
+      | "right"
+      | "bottom"
+      | "last"
+      | "bottomRight"
+    )[];
   }
 
   private getAllowedDirectionsFromConstraints(
@@ -123,6 +146,7 @@ export default class Game {
       left: ["downLeft"],
       right: ["downRight", "right"],
       bottom: ["downLeft", "down", "downRight"],
+      bottomRight: ["downRight"],
       last: ["right", "down", "downRight", "downLeft"],
     };
 
