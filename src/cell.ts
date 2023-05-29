@@ -12,6 +12,7 @@ export default class Cell {
     this.id = id;
     this.element = document.createElement("div");
     this.element.setAttribute("data-index", this.index.toString());
+    this.element.setAttribute("data-id", this.id.toString());
     this.element.classList.add("cell");
     this.element.classList.add("initial-frame");
 

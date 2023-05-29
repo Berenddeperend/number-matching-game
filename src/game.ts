@@ -239,7 +239,7 @@ export default class Game {
       this.cells.push(
         new Cell(
           this.cells.length,
-          ++this.drawnCells,
+          this.drawnCells++,
           document.querySelector(".grid") as HTMLElement
         )
       );
