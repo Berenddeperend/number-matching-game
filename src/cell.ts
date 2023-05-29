@@ -1,13 +1,15 @@
 export default class Cell {
   value: number;
-  index: number;
+  index: number; // can change when rows get cleared
+  id: number;
   element: Element;
   solved: boolean;
 
-  constructor(index: number, parentElement: Element) {
+  constructor(index: number, id: number, parentElement: Element) {
     this.value = Math.floor(Math.random() * 9 + 1);
     this.solved = false;
     this.index = index;
+    this.id = id;
     this.element = document.createElement("div");
     this.element.setAttribute("data-index", this.index.toString());
     this.element.classList.add("cell");
@@ -30,9 +32,13 @@ export default class Cell {
   }
 
   pulse() {
-    this.element.addEventListener("animationend", () => {
-      this.element.classList.remove("pulse");
-    });
+    this.element.addEventListener(
+      "animationend",
+      () => {
+        this.element.classList.remove("pulse");
+      },
+      { once: true }
+    );
     this.element.classList.add("pulse");
   }
 

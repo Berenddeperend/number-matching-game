@@ -7,12 +7,14 @@ export default class Game {
   cells: Cell[];
   gridElement: HTMLElement;
   selectedCell: Cell | null;
+  drawnCells: number;
 
   constructor(element: HTMLElement) {
     this.gridWidth = 9;
     this.gridElement = element;
     this.cells = [];
     this.selectedCell = null;
+    this.drawnCells = 0;
     this.initialize(element);
   }
 
@@ -31,16 +33,51 @@ export default class Game {
 
   private autoplay() {
     setInterval(() => {
-      const pairs = this.nextUnsolvedPair();
-      if (pairs.length) {
-        pairs.forEach((pair) => {
-          pair.pulse();
-          setTimeout(() => pair.solve(), 500);
+      const pair = this.nextUnsolvedPair();
+      if (pair.length) {
+        pair.forEach((cell) => {
+          cell.pulse();
         });
+        setTimeout(() => this.solvePair(pair), 500);
       } else {
         this.addCells();
       }
     }, 1000);
+  }
+
+  private solvePair(cells: Cell[]) {
+    cells.forEach((cell) => cell.solve());
+    this.clearEmptyRows();
+  }
+
+  private clearEmptyRows() {
+    const getRows = () => {
+      const rows: Cell[][] = [];
+      for (let i = 0; i < this.cells.length / this.gridWidth; i++) {
+        rows.push(
+          this.cells.slice(
+            i * this.gridWidth,
+            i * this.gridWidth + this.gridWidth
+          )
+        );
+      }
+      return rows;
+    };
+
+    const emptyRows = getRows().filter((row) =>
+      row.every((cell) => cell.solved)
+    );
+
+    emptyRows.forEach((row) => {
+      row.forEach((cell) => {
+        cell.element.remove();
+      });
+      this.cells.splice(row[0].index, this.gridWidth);
+      this.cells.forEach((cell, i) => {
+        cell.index = i;
+        cell.element.setAttribute("data-index", i.toString());
+      });
+    });
   }
 
   private attachEventListeners() {
@@ -77,9 +114,6 @@ export default class Game {
   }
 
   private nextUnsolvedPair() {
-    // gaat nog niet helemaal goe
-    // todo: de array overflow pair werkt ook nog niet
-
     return this.cells
       .filter((cell) => !cell.solved)
       .reduce((acc: Cell[], curr) => {
@@ -140,7 +174,7 @@ export default class Game {
   }
 
   private getAllowedDirectionsFromConstraints(
-    constraints: ("left" | "right" | "bottom" | "last")[]
+    constraints: ("left" | "right" | "bottom" | "last" | "bottomRight")[]
   ) {
     const impossibleDirectionsForConstraint = {
       left: ["downLeft"],
@@ -205,6 +239,7 @@ export default class Game {
       this.cells.push(
         new Cell(
           this.cells.length,
+          ++this.drawnCells,
           document.querySelector(".grid") as HTMLElement
         )
       );
